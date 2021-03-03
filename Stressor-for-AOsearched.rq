@@ -1,0 +1,18 @@
+#This SPARQL query allows the search of AOs based on their title, and finds all 
+#AOPs and Stressors that can lead to it, and finds chemical annotations when present.
+
+SELECT ?AO ?AOname ?AOP ?MIETitle (CONCAT('"',GROUP_CONCAT(?StressorName;SEPARATOR='","'),'"') AS ?StressorNames) (CONCAT('"',GROUP_CONCAT(?ChemicalName;SEPARATOR='","'),'"') AS ?ChemicalNames) WHERE {
+  ?AO a aopo:KeyEvent ; 
+  	dc:identifier ?AOLookup ; 
+  	dc:title ?AOname . 
+  ?AOP a aopo:AdverseOutcomePathway ; 
+  	aopo:has_adverse_outcome ?AOLookup ;
+  	aopo:has_molecular_initiating_event ?MIE ;
+  	nci:C54571 ?Stressor .
+  ?MIE dc:title ?MIETitle .
+  ?Stressor dc:title ?StressorName.
+  OPTIONAL {?Stressor aopo:has_chemical_entity ?Chemical. 
+            ?Chemical dc:title ?ChemicalName.}
+  FILTER regex (?AOname, "fibrosis", "i")} #Change the filter to search other AOs
+  ORDER BY DESC (?AO)
+
