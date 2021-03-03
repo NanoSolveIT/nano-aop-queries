@@ -1,0 +1,11 @@
+#This SPARQL query extracts all non-annotated genes from KEs of AOPs
+prefix aop: <https://identifiers.org/aop/>
+
+SELECT  distinct  ?aop ?aoptitle ?ketitle ?HGNC ?id 
+WHERE {
+    ?aop a aopo:AdverseOutcomePathway ; dc:title ?aoptitle; aopo:has_key_event ?ke .
+    ?ke a aopo:KeyEvent; edam:data_1025 ?object; dc:title ?ketitle; rdfs:label ?keid.
+    ?object edam:data_2298 ?HGNC ; skos:exactMatch ?id.
+    ?id a edam:data_1027; edam:data_1027 ?ncbi.
+  #FILTER (?aop = aop:57) #possible to apply filter for a particular AOP
+} ORDER BY DESC (?aop)

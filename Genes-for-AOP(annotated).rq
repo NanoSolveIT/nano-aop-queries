@@ -1,0 +1,11 @@
+#This SPARQL query extracts all genes annotated in KEs of AOPs.
+SELECT  distinct  ?aop ?aoptitle ?ketitle ?objectname ?prot
+WHERE {
+    ?aop a aopo:AdverseOutcomePathway ;
+        aopo:has_key_event ?ke ;
+        dc:title ?aoptitle.
+    ?ke pato:0001241 ?object; dc:title ?ketitle; rdfs:label ?keid.
+    ?object dc:title ?objectname; skos:exactMatch ?prot.
+    ?prot a edam:data_1027.
+#FILTER (?aop = aop:98) #possible to apply filter for a particular AOP
+} ORDER BY DESC (?aop)
