@@ -1,0 +1,7 @@
+#This SPARQL query allows querying all field of the AOP-Wiki RDF by regular expression
+
+SELECT ?item ?name ?x ?text WHERE {
+  ?item ?predicate ?text ; 
+      dc:title ?name .
+  FILTER regex (?text, "nanotube", "i")} #Adapt "nanotube" to perform other searches
+  ORDER BY DESC (?item)
